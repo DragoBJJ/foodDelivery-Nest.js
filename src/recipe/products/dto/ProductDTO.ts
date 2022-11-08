@@ -20,7 +20,7 @@ export class UpdateProductDTO {
   id: number;
   @IsString()
   name: string;
-  @IsNumber()
+  @IsString()
   unit: 'kg' | 'g' | 'tsp' | 'sp' | 'pinch' | 'ml' | 'l' | 'item';
 
   @IsNumber()

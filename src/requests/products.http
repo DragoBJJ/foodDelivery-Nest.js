@@ -4,14 +4,14 @@
 GET http://localhost:3000/products
 
 
-### Create disher
+### Create products
 POST http://localhost:3000/products
 Content-Type: application/json
 
 {
-  "name": "T-shirt",
+  "name": "T-shirt II",
   "unit": "item",
-  "amount": 2,
+  "amount": 5,
    "dishId": 1
 }
 

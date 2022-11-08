@@ -4,19 +4,26 @@ import {
   ProductDTO,
   UpdateProductDTO,
 } from './dto/ProductDTO';
-import { Product } from './Product';
+import { Product } from './product.entity';
 import { DishService } from '../dishes/dish.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 
 @Injectable()
 export class ProductService {
+  constructor(
+    @InjectRepository(Product) private productRepository: Repository<Product>,
+  ) {}
+
   async readAll(): Promise<Product[]> {
-    return await Product.find();
+    return await this.productRepository.find();
   }
   async getProductByID(id: number): Promise<Product> {
-    const [product] = await Product.findBy({ id });
-    if (!product) {
-      throw new NotFoundException('Product not found');
-    }
+    const [product] = await this.productRepository.find({
+      where: { id },
+      relations: ['products'],
+    });
+    if (!product) throw new NotFoundException('Product not found');
     return product;
   }
 
@@ -27,18 +34,16 @@ export class ProductService {
   //   return products;
   // }
 
-  createOne(newProduct: CreateProductDTO): Promise<Product> {
-    const product = new Product();
-    Object.assign(product, newProduct);
-    return product.save();
+  async createOne(product: CreateProductDTO): Promise<Product> {
+    const newProduct = this.productRepository.create(product);
+    return this.productRepository.save(newProduct);
   }
-  async updateOne(product: UpdateProductDTO): Promise<Product> {
+  async updateOne(product: UpdateProductDTO): Promise<UpdateResult> {
     const productToUpdate = await this.getProductByID(product.id);
-    Object.assign(productToUpdate, product);
-    return productToUpdate;
+    return this.productRepository.update(product.id, productToUpdate);
   }
   async deleteOne(productID: ProductDTO['id']): Promise<Product> {
     const productToRemove = await this.getProductByID(productID);
-    return productToRemove.remove();
+    return this.productRepository.remove(productToRemove);
   }
 }
