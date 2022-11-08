@@ -26,8 +26,8 @@ export class TypeOrmConfig {
       autoLoadEntities: true,
       synchronize: false, // not for production [!]
       migrationsRun: false,
-      // entities: ['**/dist/**/../*.js'],
-      entities: ['dist/**/*.entity{.ts,.js}'],
+      entities: ['**/dist/**/../*.js'],
+      // entities: ['dist/**/*.entity{.ts,.js}'],
       migrations: ['dist/database/migrations/**/*{.ts,.js}'],
       cli: { migrationsDir: 'src/database/migrations' },
     };

@@ -16,6 +16,10 @@ export class Dish extends BaseEntity {
   id: number;
   @Column({ type: 'varchar' })
   name: string;
+
+  @Column({ type: 'varchar' })
+  slug: string;
+
   @Column({ type: 'decimal' })
   servings: number;
   @Column({ nullable: true, type: 'text' })
@@ -26,7 +30,7 @@ export class Dish extends BaseEntity {
   })
   user: User;
   @Column({ type: 'boolean', default: false })
-  isPublic?: number;
+  isPublic: boolean;
 
   @OneToMany(() => Ingredient, (ingredient: Ingredient) => ingredient.dish, {
     onDelete: 'CASCADE',

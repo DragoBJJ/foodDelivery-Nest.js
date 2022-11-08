@@ -7,6 +7,15 @@ import {
 } from 'typeorm';
 import { Ingredient } from '../ingredients/ingredient.entity';
 
+export type UintType =
+  | 'kg'
+  | 'g'
+  | 'tsp'
+  | 'sp'
+  | 'pinch'
+  | 'ml'
+  | 'l'
+  | 'item';
 @Entity()
 export class Product extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -16,7 +25,7 @@ export class Product extends BaseEntity {
   name: string;
 
   @Column({ type: 'varchar' })
-  unit: 'kg' | 'g' | 'tsp' | 'sp' | 'pinch' | 'ml' | 'l' | 'item';
+  unit: UintType;
 
   @OneToMany(() => Ingredient, (ingredient: Ingredient) => ingredient.product, {
     onDelete: 'CASCADE',
