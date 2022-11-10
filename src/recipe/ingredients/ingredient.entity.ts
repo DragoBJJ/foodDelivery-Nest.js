@@ -24,4 +24,10 @@ export class Ingredient extends BaseEntity {
     onDelete: 'CASCADE',
   })
   dish: Dish;
+
+  @Column({ type: 'int' })
+  productId: number;
+
+  @Column({ type: 'int' })
+  dishId: number;
 }

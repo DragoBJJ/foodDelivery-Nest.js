@@ -1,0 +1,9 @@
+
+### [C]reate user
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "Drago@gmail.com",
+  "password": "1234"
+}
