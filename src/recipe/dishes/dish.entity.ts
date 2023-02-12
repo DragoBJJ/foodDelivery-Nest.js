@@ -1,4 +1,3 @@
-import { Product } from '../products/product.entity';
 import {
   Entity,
   Column,
@@ -14,6 +13,7 @@ import { Ingredient } from '../ingredients/ingredient.entity';
 export class Dish extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
   @Column({ type: 'varchar' })
   name: string;
 
@@ -22,6 +22,7 @@ export class Dish extends BaseEntity {
 
   @Column({ type: 'decimal' })
   servings: number;
+
   @Column({ nullable: true, type: 'text' })
   description?: string;
 
@@ -29,6 +30,10 @@ export class Dish extends BaseEntity {
     onDelete: 'CASCADE',
   })
   user: User;
+
+  @Column({ type: 'int' })
+  userId: number;
+
   @Column({ type: 'boolean', default: false })
   isPublic: boolean;
 
@@ -36,4 +41,7 @@ export class Dish extends BaseEntity {
     onDelete: 'CASCADE',
   })
   ingredients: Ingredient[];
+
+  @Column({ type: 'varchar' })
+  createdAt: string;
 }

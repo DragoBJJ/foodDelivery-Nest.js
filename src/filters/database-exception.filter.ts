@@ -7,9 +7,12 @@ import {
 import { QueryFailedError, TypeORMError } from 'typeorm';
 import { PostgresError } from 'pg-error-enum';
 import { Response } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 @Catch(TypeORMError)
 export class DatabaseExceptionFilter implements ExceptionFilter {
+  constructor(private readonly configService: ConfigService) {}
+
   catch(exception: TypeORMError, host: ArgumentsHost): any {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -22,7 +25,15 @@ export class DatabaseExceptionFilter implements ExceptionFilter {
         statusCode = HttpStatus.CONFLICT;
       }
     }
-    response.status(statusCode).json({
+
+    if (this.configService.get('NODE_ENV') === 'development') {
+      return response.status(statusCode).json({
+        statusCode,
+        stack: exception.stack,
+        message: exception.message,
+      });
+    }
+    return response.status(statusCode).json({
       statusCode,
       message,
     });

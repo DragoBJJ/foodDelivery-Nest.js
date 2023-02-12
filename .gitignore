@@ -41,4 +41,3 @@ lerna-debug.log*
 
 .env
 .env.development
-#!.env.development

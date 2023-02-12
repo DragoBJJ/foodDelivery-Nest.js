@@ -31,4 +31,7 @@ export class Product extends BaseEntity {
     onDelete: 'CASCADE',
   })
   ingredients: Ingredient[];
+
+  @Column({ type: 'varchar' })
+  createdAt: string;
 }

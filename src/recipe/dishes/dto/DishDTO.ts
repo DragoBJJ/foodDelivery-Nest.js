@@ -1,32 +1,20 @@
-import { IsNumber, IsString, IsOptional } from 'class-validator';
-import { OmitType } from '@nestjs/mapped-types';
-
-export class DishDTO {
-  @IsOptional()
-  @IsNumber()
-  id: number;
-  @IsString()
-  name: string;
-  @IsNumber()
-  servings: number;
-
-  @IsOptional()
-  @IsString()
-  description?: string;
-}
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateDishDTO {
   @IsOptional()
-  @IsNumber()
-  id: number;
   @IsString()
   name: string;
+
+  @IsOptional()
   @IsNumber()
   servings: number;
 
   @IsOptional()
   @IsString()
-  description?: string;
+  description: string;
 }
 
-export class CreateDishDTO extends OmitType(UpdateDishDTO, ['id'] as const) {}
+export class CreateDishDTO extends UpdateDishDTO {
+  @IsString()
+  name;
+}

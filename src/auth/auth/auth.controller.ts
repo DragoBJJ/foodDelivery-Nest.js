@@ -2,6 +2,7 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -18,12 +19,14 @@ import { ConfigService } from '@nestjs/config';
 import { LoginUserDto } from '../user/dto/login-user.dto';
 import { RefreshAuthGuard } from './refresh.guard';
 import { JwtAuthGuard } from './jwt.guard';
+import { UserService } from '../user/user.service';
 
 @Controller('auth')
 @UseInterceptors(ClassSerializerInterceptor)
 export class AuthController {
   constructor(
     private readonly configService: ConfigService,
+    private readonly userService: UserService,
     private readonly authService: AuthService,
   ) {}
 
@@ -33,6 +36,7 @@ export class AuthController {
     @Res() res,
   ): Promise<User> {
     const user = await this.authService.register({ email, password });
+    console.log('user', user);
     await this.authService.setAuthTokens(res, user.id);
     return user;
   }
@@ -62,5 +66,15 @@ export class AuthController {
     res.json({
       message: 'Logged out',
     });
+  }
+
+  @Delete('delete')
+  @UseGuards(JwtAuthGuard)
+  async delete(@Req() req, @Res({ passthrough: true }) res) {
+    await this.authService.clearAuthTokens(res, res.user.id);
+    await this.userService.delete(req.user.id);
+    return {
+      message: 'User deleted',
+    };
   }
 }
